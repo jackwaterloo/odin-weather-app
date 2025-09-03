@@ -15,7 +15,7 @@ export default class Giphy {
 
       // throws error if request is not successful
       if (response.status !== 200) {
-        throw new Error(`Status code: ${response.status}`);
+        throw new Error(`Status code: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();

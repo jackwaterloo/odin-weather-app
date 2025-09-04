@@ -2,7 +2,7 @@
  * Giphy class for fetching GIFs from the Giphy API.
  */
 export default class Giphy {
-  static #giphy_url = 'https://api.giphy.com/v1/gifs/search';
+  static #giphy_url = 'https://api.giphy.com/v1/gifs/translate';
   // This API key is free. It is rate limited. Doesn't matter if public.
   static #api_key = 'ISRMFiS2uKKNjdvuekSn5FhFwAMX8ocM';
 
@@ -18,7 +18,7 @@ export default class Giphy {
   static async fetchGif(searchTerm) {
     try {
       // need to add parameters into URL manually. Fetch does not accept parameters.
-      const url = `${Giphy.#giphy_url}?api_key=${Giphy.#api_key}&q=${encodeURIComponent(searchTerm)}&limit=1`;
+      const url = `${Giphy.#giphy_url}?api_key=${Giphy.#api_key}&s=${encodeURIComponent(searchTerm)}`;
       const response = await fetch(url, { mode: 'cors' });
 
       // throws error if request is not successful
@@ -29,8 +29,9 @@ export default class Giphy {
       }
 
       const data = await response.json();
-      const src = data.data[0].images.original.url;
-      const altText = data.data[0].alt_text;
+      console.log("giphy json data: \n",data);
+      const src = data.data.images.original.url;
+      const altText = data.data.title;
       return {
         src,
         altText,

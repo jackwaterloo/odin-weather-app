@@ -1,9 +1,17 @@
+/**
+ * Weather class for fetching and processing weather data from Visual Crossing API.
+ */
 export default class Weather {
   static #weatherUrl =
     'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/';
   // This API key is free. It is rate limited. Doesn't matter if public.
   static #apikey = 'Q8DU8AYZ2E7KSWESNSQZ7FNEW';
 
+  /**
+   * Fetches weather data for a given location.
+   * @param {string} location - The location to fetch weather data for.
+   * @returns {Promise<Object|undefined>} An object containing location, temperature, conditions, timeZone, and icon, or undefined if an error occurs.
+   */
   static async getWeatherData(location) {
     try {
       location = location.trim().toLowerCase();

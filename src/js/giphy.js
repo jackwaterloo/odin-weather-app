@@ -1,3 +1,6 @@
+/**
+ * Giphy class for fetching GIFs from the Giphy API.
+ */
 export default class Giphy {
   static #giphy_url = 'https://api.giphy.com/v1/gifs/search';
   // This API key is free. It is rate limited. Doesn't matter if public.
@@ -6,6 +9,11 @@ export default class Giphy {
   // no need for constructor since we will just be calling static methods from Giphy class
   constructor() {}
 
+  /**
+   * Fetches a GIF from Giphy based on the provided search term.
+   * @param {string} searchTerm - The term to search for GIFs.
+   * @returns {Promise<Object|undefined>} An object containing src and altText of the GIF, or undefined if an error occurs.
+   */
   // static function because we will not be using it on an instance of "Giphy"
   static async fetchGif(searchTerm) {
     try {
@@ -15,11 +23,18 @@ export default class Giphy {
 
       // throws error if request is not successful
       if (response.status !== 200) {
-        throw new Error(`Status code: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Status code: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
-      return data;
+      const src = data.data[0].images.original.url;
+      const altText = data.data[0].alt_text;
+      return {
+        src,
+        altText,
+      };
     } catch (error) {
       console.error('Error fetching Gif:', error);
     }

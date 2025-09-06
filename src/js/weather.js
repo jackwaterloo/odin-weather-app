@@ -27,7 +27,7 @@ export default class Weather {
       }
 
       const data = await response.json();
-
+      console.log('raw weather response:\n', data);
       // grab data that we want
       const temp = data.currentConditions.temp;
       const conditions = data.currentConditions.conditions;

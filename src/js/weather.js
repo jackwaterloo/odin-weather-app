@@ -22,12 +22,12 @@ export default class Weather {
       // throws error if request is not successful
       if (response.status !== 200) {
         throw new Error(
-          `Status code: ${response.status} ${response.statusText}`
+          `weather API Status code: ${response.status}`
         );
       }
 
       const data = await response.json();
-      console.log('raw weather response:\n', data);
+      console.log('weather json data:\n', data);
       // grab data that we want
       const temp = data.currentConditions.temp;
       const conditions = data.currentConditions.conditions;
@@ -45,6 +45,7 @@ export default class Weather {
       };
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 }

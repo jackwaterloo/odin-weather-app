@@ -40,4 +40,31 @@ export default class DomHandler {
 
     return div;
   }
+
+  /**
+   * Displays a fetch error message in the designated error container on the DOM.
+   *
+   * @static
+   * @param {Error|string} error - The error object or message to display.
+   */
+  static displayFetchError(error){
+    const errorDiv = document.querySelector('#error-div');
+    errorDiv.innerHTML = '';
+
+    const pElem = document.createElement('p');
+    pElem.classList.add('error-font');
+    pElem.textContent = `${error}`;
+
+    errorDiv.appendChild(pElem);
+  }
+
+  /**
+   * Clears the contents of the error message container in the DOM.
+   * Selects the element with the ID 'error-div' and removes all its inner HTML.
+   * Typically used to reset or hide error messages displayed to the user.
+   */
+  static clearError(){
+    const errorDiv = document.querySelector('#error-div');
+    errorDiv.innerHTML = '';
+  }  
 }

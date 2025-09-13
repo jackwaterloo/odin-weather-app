@@ -24,7 +24,7 @@ export default class Giphy {
       // throws error if request is not successful
       if (response.status !== 200) {
         throw new Error(
-          `Status code: ${response.status} ${response.statusText}`
+          `giphy API Status code: ${response.status}`
         );
       }
 
@@ -37,7 +37,8 @@ export default class Giphy {
         altText,
       };
     } catch (error) {
-      console.error('Error fetching Gif:', error);
+      console.error(error);
+      throw error;
     }
   }
 }

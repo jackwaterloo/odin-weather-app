@@ -18,11 +18,9 @@ if (localStorageData.length > 0) {
   DomHandler.displayObjects(domeWeatherObjects);
 }
 
-// turn this into async
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const location = document.querySelector('#location-input').value;
-  console.log(location);
 
   Weather.getWeatherData(location).then((weatherData) => {
     Giphy.fetchGif(weatherData.icon + ' weather').then((gifData) => {
@@ -32,7 +30,27 @@ form.addEventListener('submit', (e) => {
       StorageHandler.saveData(domWeatherObject);
 
       DomHandler.displayObjects(domeWeatherObjects);
+      DomHandler.clearError();
     });
+  })
+  .catch((err) =>{
+    const errString = err.toString().toLowerCase()
+    switch (errString) {
+      case 'error: weather api status code: 400':
+        DomHandler.displayFetchError('Invalid location for weather API. Check spelling or input a new location');
+        break;
+      case 'error: weather api status code: 429':
+        DomHandler.displayFetchError('Weather API request limit reached. Wait and try again later.');
+        break;
+      case 'error: giphy api status code: 400':
+        DomHandler.displayFetchError('Bad request to Giphy API. Search argument bad.');
+        break;
+      case 'error: giphy api status code: 429':
+        DomHandler.displayFetchError('Giphy API request limit reached. Wait and try again later.');
+        break;
+      default:
+        DomHandler.displayFetchError('The following error occurred:\n'+errString);
+    }
   });
 });
 
@@ -43,9 +61,7 @@ inputElem.addEventListener('input', () => {
   const inputValue = inputElem.value.trim();
   if (!inputValue.match(zipRegex) && !inputValue.match(cityRegex)) {
     inputElem.setCustomValidity('Type in a valid zip code or city!');
-    console.log('invalid input')
   } else {
     inputElem.setCustomValidity(''); // if it is not cleared, will not be able to submit when valid
-    console.log('valid input')
   }
 });

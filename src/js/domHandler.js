@@ -27,18 +27,32 @@ export default class DomHandler {
    */
   static #createWeatherElement(weatherObject) {
     const img = document.createElement('img');
-    const div = document.createElement('div');
+    const cardDiv = document.createElement('div');
+    cardDiv.classList.add('card', 'mb-3', 'col-12', 'col-md-6', 'mx-auto');
+    cardDiv.setAttribute('style', 'width: 18rem');
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
     for (const key in weatherObject) {
       if (['src', 'altText', 'icon'].includes(key)) continue;
-      const p = document.createElement('p');
-      p.textContent = weatherObject[key];
-      div.appendChild(p);
+      let elem;
+      if (key === 'location') {
+        elem = document.createElement('h5');
+        elem.innerHTML = `<strong>${weatherObject[key]}</strong>`;
+        elem.classList.add(['card-title']);
+      } else {
+        elem = document.createElement('p');
+        elem.innerHTML = `<strong>${key}:</strong> ${weatherObject[key]}`;
+        elem.classList.add('card-text');
+      }
+      cardBody.appendChild(elem);
     }
     img.setAttribute('src', weatherObject.src);
     img.setAttribute('alt', weatherObject.altText);
-    div.appendChild(img);
+    img.classList.add('card-img-bottom');
+    cardDiv.appendChild(img);
+    cardDiv.appendChild(cardBody);
 
-    return div;
+    return cardDiv;
   }
 
   /**
@@ -98,7 +112,7 @@ export default class DomHandler {
    * Clears the loading message from the loading-div in the DOM.
    * Removes the text content of the element with id 'loading-elem' if it exists.
    */
-  static clearLoading(){
+  static clearLoading() {
     const loadingElem = document.querySelector('#loading-elem');
     if (loadingElem) {
       loadingElem.textContent = '';

@@ -47,12 +47,12 @@ export default class DomHandler {
    * @static
    * @param {Error|string} error - The error object or message to display.
    */
-  static displayFetchError(error){
+  static displayFetchError(error) {
     const errorDiv = document.querySelector('#error-div');
     errorDiv.innerHTML = '';
 
     const pElem = document.createElement('p');
-    pElem.classList.add('error-font');
+    // Add classes maybe
     pElem.textContent = `${error}`;
 
     errorDiv.appendChild(pElem);
@@ -63,8 +63,45 @@ export default class DomHandler {
    * Selects the element with the ID 'error-div' and removes all its inner HTML.
    * Typically used to reset or hide error messages displayed to the user.
    */
-  static clearError(){
+  static clearError() {
     const errorDiv = document.querySelector('#error-div');
     errorDiv.innerHTML = '';
-  }  
+  }
+
+  /**
+   * Displays a loading message for the specified location in the loading-div.
+   * @param {string} location - The location being loaded.
+   */
+  static displayLoading(location) {
+    const loadingDiv = document.querySelector('#loading-div');
+    loadingDiv.innerHTML = '';
+
+    const pElem = document.createElement('p');
+    // Add classes maybe
+    pElem.id = 'loading-elem';
+    pElem.textContent = `${location} loading...`;
+
+    loadingDiv.appendChild(pElem);
+  }
+
+  /**
+   * Updates the loading message to indicate data has loaded for the specified location.
+   * @param {string} location - The location for which data has loaded.
+   */
+  static displayLoadComplete(location) {
+    const pElem = document.querySelector('#loading-elem');
+
+    pElem.textContent = `${location} data loaded!`;
+  }
+
+  /**
+   * Clears the loading message from the loading-div in the DOM.
+   * Removes the text content of the element with id 'loading-elem' if it exists.
+   */
+  static clearLoading(){
+    const loadingElem = document.querySelector('#loading-elem');
+    if (loadingElem) {
+      loadingElem.textContent = '';
+    }
+  }
 }

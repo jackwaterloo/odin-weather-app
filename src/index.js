@@ -8,6 +8,7 @@ import StorageHandler from './js/storageHandler';
 
 const form = document.querySelector('form');
 let domeWeatherObjects = [];
+let isLoading = false;
 const zipRegex = /^\d{5}(-\d{4})?$/;
 const cityRegex = /^[A-Za-z\s,\-']{2,}$/;
 
@@ -20,7 +21,17 @@ if (localStorageData.length > 0) {
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+  
+  // logic to prevent multiple submits during loading
+  if (isLoading) {
+    return
+  }
+
+  isLoading = true;
+  
   const location = document.querySelector('#location-input').value;
+  DomHandler.displayLoading(location);
+  DomHandler.clearError();
 
   Weather.getWeatherData(location).then((weatherData) => {
     Giphy.fetchGif(weatherData.icon + ' weather').then((gifData) => {
@@ -30,11 +41,14 @@ form.addEventListener('submit', (e) => {
       StorageHandler.saveData(domWeatherObject);
 
       DomHandler.displayObjects(domeWeatherObjects);
-      DomHandler.clearError();
+      DomHandler.displayLoadComplete(location);
+      isLoading = false;
     });
   })
   .catch((err) =>{
-    const errString = err.toString().toLowerCase()
+    const errString = err.toString().toLowerCase();
+    isLoading = false;
+    DomHandler.clearLoading();
     switch (errString) {
       case 'error: weather api status code: 400':
         DomHandler.displayFetchError('Invalid location for weather API. Check spelling or input a new location');

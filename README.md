@@ -31,10 +31,12 @@ odin-weather-app/
 │   │   └── main.css          # Custom styles
 │   ├── index.js              # Main application entry point
 │   └── main.html             # HTML template
-├── .eslintrc.js              # ESLint configuration
+├── eslint.config.mjs         # ESLint configuration
 ├── .prettierrc               # Prettier configuration
+├── webpack.common.js         # Common webpack configuration
+├── webpack.dev.js            # Development-specific webpack config
+├── webpack.prod.js           # Production-specific webpack config
 ├── package.json              # Project dependencies and scripts
-├── webpack.config.js         # Webpack configuration
 └── README.md                 # Project documentation
 ```
 
@@ -47,7 +49,7 @@ odin-weather-app/
 - ✅ **Local Storage** - Persistent data between sessions
 - ✅ **Form Validation** - Client-side validation using Constraint Validation API
 - ✅ **Error Handling** - Comprehensive error catching and user feedback
-- ✅ **Build Tools** - Webpack configuration and optimization
+- ✅ **Build Tools** - Webpack configuration with environment-specific settings
 - ✅ **Development Workflow** - NPM scripts, linting, and formatting
 
 ## Technical Implementation
@@ -86,19 +88,25 @@ Robust error handling with user-friendly messages for different API error condit
 
 #### Webpack Configuration
 
-Configured Webpack for development and production builds with:
+Configured Webpack with:
 
 - Source maps for debugging
 - CSS loaders
 - HTML template processing
 - Dev server with hot reloading
 
+The project uses a split webpack configuration for optimal development and production builds:
+
+- **webpack.common.js**: Shared configuration for both environments
+- **webpack.dev.js**: Development-specific settings with source maps and dev server
+- **webpack.prod.js**: Production-specific optimizations
+
 #### NPM Scripts
 
 ```json
 "scripts": {
-  "build": "webpack build",
-  "dev": "webpack serve",
+  "build": "webpack --config webpack.prod.js",
+  "dev": "webpack serve --open --config webpack.dev.js",
   "format": "prettier . --write"
 }
 ```
@@ -113,8 +121,8 @@ Configured Webpack for development and production builds with:
 
 ### Prerequisites
 
-- Node.js (v14+)
-- npm or yarn
+- Node.js
+- npm
 
 ### Installation
 

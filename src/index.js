@@ -21,51 +21,62 @@ if (localStorageData.length > 0) {
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  
+
   // logic to prevent multiple submits during loading
   if (isLoading) {
-    return
+    return;
   }
 
   isLoading = true;
-  
+
   const location = document.querySelector('#location-input').value;
   DomHandler.displayLoading(location);
   DomHandler.clearError();
 
-  Weather.getWeatherData(location).then((weatherData) => {
-    Giphy.fetchGif(weatherData.icon + ' weather').then((gifData) => {
-      console.log(gifData);
-      const domWeatherObject = { ...weatherData, ...gifData };
-      domeWeatherObjects.push(domWeatherObject);
-      StorageHandler.saveData(domWeatherObject);
+  Weather.getWeatherData(location)
+    .then((weatherData) => {
+      Giphy.fetchGif(weatherData.icon + ' weather').then((gifData) => {
+        console.log(gifData);
+        const domWeatherObject = { ...weatherData, ...gifData };
+        domeWeatherObjects.push(domWeatherObject);
+        StorageHandler.saveData(domWeatherObject);
 
-      DomHandler.displayObjects(domeWeatherObjects);
-      DomHandler.displayLoadComplete(location);
+        DomHandler.displayObjects(domeWeatherObjects);
+        DomHandler.displayLoadComplete(location);
+        isLoading = false;
+      });
+    })
+    .catch((err) => {
+      const errString = err.toString().toLowerCase();
       isLoading = false;
+      DomHandler.clearLoading();
+      switch (errString) {
+        case 'error: weather api status code: 400':
+          DomHandler.displayFetchError(
+            'Invalid location for weather API. Check spelling or input a new location'
+          );
+          break;
+        case 'error: weather api status code: 429':
+          DomHandler.displayFetchError(
+            'Weather API request limit reached. Wait and try again later.'
+          );
+          break;
+        case 'error: giphy api status code: 400':
+          DomHandler.displayFetchError(
+            'Bad request to Giphy API. Search argument bad.'
+          );
+          break;
+        case 'error: giphy api status code: 429':
+          DomHandler.displayFetchError(
+            'Giphy API request limit reached. Wait and try again later.'
+          );
+          break;
+        default:
+          DomHandler.displayFetchError(
+            'The following error occurred:\n' + errString
+          );
+      }
     });
-  })
-  .catch((err) =>{
-    const errString = err.toString().toLowerCase();
-    isLoading = false;
-    DomHandler.clearLoading();
-    switch (errString) {
-      case 'error: weather api status code: 400':
-        DomHandler.displayFetchError('Invalid location for weather API. Check spelling or input a new location');
-        break;
-      case 'error: weather api status code: 429':
-        DomHandler.displayFetchError('Weather API request limit reached. Wait and try again later.');
-        break;
-      case 'error: giphy api status code: 400':
-        DomHandler.displayFetchError('Bad request to Giphy API. Search argument bad.');
-        break;
-      case 'error: giphy api status code: 429':
-        DomHandler.displayFetchError('Giphy API request limit reached. Wait and try again later.');
-        break;
-      default:
-        DomHandler.displayFetchError('The following error occurred:\n'+errString);
-    }
-  });
 });
 
 // Form validation

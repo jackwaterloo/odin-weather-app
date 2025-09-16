@@ -23,13 +23,11 @@ export default class Giphy {
 
       // throws error if request is not successful
       if (response.status !== 200) {
-        throw new Error(
-          `giphy API Status code: ${response.status}`
-        );
+        throw new Error(`giphy API Status code: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("giphy json data: \n",data);
+      console.log('giphy json data: \n', data);
       const src = data.data.images.original.url;
       const altText = data.data.title;
       return {

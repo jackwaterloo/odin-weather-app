@@ -21,9 +21,7 @@ export default class Weather {
 
       // throws error if request is not successful
       if (response.status !== 200) {
-        throw new Error(
-          `weather API Status code: ${response.status}`
-        );
+        throw new Error(`weather API Status code: ${response.status}`);
       }
 
       const data = await response.json();

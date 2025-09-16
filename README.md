@@ -2,7 +2,7 @@
 
 This project is from the Odin Project. I combined concepts from both the [ToDo List project](https://www.theodinproject.com/lessons/node-path-javascript-todo-list) and the [Weather App project](https://www.theodinproject.com/lessons/node-path-javascript-weather-app).
 
-Click here for demo of project.
+Click [here](https://jackwaterloo.github.io/odin-weather-app/) for demo of project.
 
 ## Overview
 This Weather App is a sophisticated web application that demonstrates modern JavaScript development techniques and best practices. The app fetches and displays real-time weather data for any location, accompanied by thematically appropriate GIFs to represent weather conditions.
